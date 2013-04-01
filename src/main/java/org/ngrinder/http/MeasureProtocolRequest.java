@@ -49,13 +49,41 @@ public class MeasureProtocolRequest {
 	private String client_ID;
 
 	private String applicationName;
-
-	public MeasureProtocolRequest(String trackId, String clientID, String applicationName) {
-		this.track_ID = trackId;
-		this.client_ID = clientID;
-		this.applicationName = applicationName;
+	
+	private String appVersion;
+	
+  /**
+   *  constructor passing the application name, application version  and google analytics tracking code
+   *
+   * @param appName       
+   * @param appVersion         
+   * @param trackingCode 
+   * @param client ID
+   */
+	public MeasureProtocolRequest(String appName, String appVersion, String trackingCode, String clientID) {
+		this(appName, trackingCode, clientID);
+		this.appVersion = appVersion;
 	}
 
+  /**
+   *  constructor passing the application name and google analytics tracking code
+   *
+   * @param appName        
+   * @param trackingCode 
+   * @param client ID
+   */
+	public MeasureProtocolRequest(String appName, String trackingCode, String clientID) {
+		this.track_ID = trackingCode;
+		this.client_ID = clientID;
+		this.applicationName = appName;
+	}
+
+  /**
+   *  execute  http post method and send data to Google Analytics
+   *
+   * @param Name       
+   * @param value         
+   */
 	public boolean execRequest(String name, String value) {
 		HttpClient client = new DefaultHttpClient();
 		HttpPost post;
@@ -69,6 +97,9 @@ public class MeasureProtocolRequest {
 			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.CLIENT_ID, client_ID));
 			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.HIT_TYPE, "event"));
 			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.APPLICATION_NAME, applicationName));
+			nameValuePairs.add((!(this.appVersion == null || this.appVersion.length() == 0)) ? new BasicNameValuePair(
+					AnalyticsParameterConstants.APPLICATION_VERSION, this.appVersion) : new BasicNameValuePair(
+					AnalyticsParameterConstants.APPLICATION_VERSION, AnalyticsParameterConstants.DEFAULT_VERSION));
 
 			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.EVENT_CATEGORY, "TestStaticData"));
 			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.EVENT_ACTION, "collect"));

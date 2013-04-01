@@ -37,10 +37,30 @@ public class GoogleAnalytic {
 
 	private MeasureProtocolRequest httpPostMothod;
 
-	public GoogleAnalytic(String trackId, String applicaitonName) {
-		httpPostMothod = new MeasureProtocolRequest(trackId, CLIENT_ID, applicaitonName);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.ngrinder.http.MeasureProtocolRequest#MeasureProtocolRequest()
+	 */
+	public GoogleAnalytic(String appName, String trackingCode) {
+		httpPostMothod = new MeasureProtocolRequest(appName, trackingCode, CLIENT_ID);
 	}
-
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.ngrinder.http.MeasureProtocolRequest#MeasureProtocolRequest()
+	 */
+	public GoogleAnalytic(String appName, String appVersion, String trackingCode) {
+		httpPostMothod = new MeasureProtocolRequest(appName, appVersion, trackingCode, CLIENT_ID);
+	}
+	
+  /**
+   *  send statistic data  to Google Analytics
+   *
+   * @param Name       
+   * @param value         
+   */
 	public boolean sendStaticDataToUA(String name, String value) {
 		return httpPostMothod.execRequest(name, value);
 	}

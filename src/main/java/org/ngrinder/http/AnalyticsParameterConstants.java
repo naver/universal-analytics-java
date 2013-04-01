@@ -50,6 +50,9 @@ public class AnalyticsParameterConstants {
 	public static final String EVENT_LABEL= "el";
 	
 	public static final String EVENT_VALUE= "ev";
+	
+	public static final String DEFAULT_VERSION = "1.0.0";
+
 
 
 }
