@@ -1,4 +1,4 @@
-universal-analytics-java
+Universal-Analytics-Java
 ========================
-
-Google Universial Analytics Measurement Protocol Implementation for Java
+    The Measurement Protocol is part of Universal Analytics,which allows developers to make HTTP requests to send raw user interaction data directly to Google Analytics servers.
+    This is Java Implementation for Measurement Protocol.
