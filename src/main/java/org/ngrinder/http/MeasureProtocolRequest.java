@@ -1,37 +1,23 @@
-/*
- * Copyright (C) 2012 - 2012 NHN Corporation
- * All rights reserved.
+/* 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * This file is part of The nGrinder software distribution. Refer to
- * the file LICENSE which is part of The nGrinder distribution for
- * licensing details. The nGrinder distribution is available on the
- * Internet at http://nhnopensource.org/ngrinder
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
  */
+
 package org.ngrinder.http;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +38,13 @@ public class MeasureProtocolRequest {
 	
 	private String appVersion;
 	
+	private String eventCategory = "TestStaticData";
+
+	private String eventAction = "collect";
+
+	
   /**
-   *  constructor passing the application name, application version  and google analytics tracking code
+   *  Constructor passing the application name, application version  and google analytics tracking code
    *
    * @param appName       
    * @param appVersion         
@@ -66,7 +57,7 @@ public class MeasureProtocolRequest {
 	}
 
   /**
-   *  constructor passing the application name and google analytics tracking code
+   *  Constructor passing the application name and google analytics tracking code
    *
    * @param appName        
    * @param trackingCode 
@@ -79,43 +70,56 @@ public class MeasureProtocolRequest {
 	}
 
   /**
-   *  execute  http post method and send data to Google Analytics
+   *  Execute  http post method and send data to Google Analytics
    *
    * @param Name       
    * @param value         
    */
 	public boolean execRequest(String name, String value) {
-		HttpClient client = new DefaultHttpClient();
-		HttpPost post;
+		HttpClient client = new HttpClient();
+		PostMethod method = new PostMethod(AnalyticsParameterConstants.POST_URL);
+		method.addParameter(AnalyticsParameterConstants.PROTOCAL_VERSION, "1");
+		method.addParameter(AnalyticsParameterConstants.TRACKING_ID, track_ID);
+		method.addParameter(AnalyticsParameterConstants.CLIENT_ID, client_ID);
+		method.addParameter(AnalyticsParameterConstants.HIT_TYPE, "event");
+		method.addParameter(AnalyticsParameterConstants.APPLICATION_NAME, applicationName);
+		method.addParameter(AnalyticsParameterConstants.APPLICATION_VERSION,
+				(!(this.appVersion == null || this.appVersion.length() == 0)) ? this.appVersion
+						: AnalyticsParameterConstants.DEFAULT_VERSION);
+		method.addParameter(AnalyticsParameterConstants.EVENT_CATEGORY, eventCategory);
+		method.addParameter(AnalyticsParameterConstants.EVENT_ACTION, eventAction);
+		method.addParameter(AnalyticsParameterConstants.EVENT_LABEL, name);
+		method.addParameter(AnalyticsParameterConstants.EVENT_VALUE, value);
 
 		try {
-			post = new HttpPost(AnalyticsParameterConstants.POST_URL);
-
-			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.PROTOCAL_VERSION, "1"));
-			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.TRACKING_ID, track_ID));
-			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.CLIENT_ID, client_ID));
-			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.HIT_TYPE, "event"));
-			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.APPLICATION_NAME, applicationName));
-			nameValuePairs.add((!(this.appVersion == null || this.appVersion.length() == 0)) ? new BasicNameValuePair(
-					AnalyticsParameterConstants.APPLICATION_VERSION, this.appVersion) : new BasicNameValuePair(
-					AnalyticsParameterConstants.APPLICATION_VERSION, AnalyticsParameterConstants.DEFAULT_VERSION));
-
-			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.EVENT_CATEGORY, "TestStaticData"));
-			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.EVENT_ACTION, "collect"));
-			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.EVENT_LABEL, name));
-			nameValuePairs.add(new BasicNameValuePair(AnalyticsParameterConstants.EVENT_VALUE, value));
-
-			post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-			HttpResponse response = client.execute(post);
-
-			return (response.getStatusLine().getStatusCode() == 200);
-
+			int returnCode = client.executeMethod(method);
+			return (returnCode == HttpStatus.SC_OK);
 		} catch (Exception e) {
 			LOG.error("ERROR: {}", e.getMessage());
 			return false;
 		}
+	}
+	
+	/**
+	 * Get event category and its default is TestStaticData
+	 */
+	public String getEventCategory() {
+		return eventCategory;
+	}
+	
+	public void setEventCategory(String eventCategory) {
+		this.eventCategory = eventCategory;
+	}
+
+	/**
+	 * Get event action and its default is collect
+	 */
+	public String getEventAction() {
+		return eventAction;
+	}
+	
+	public void setEventAction(String eventAction) {
+		this.eventAction = eventAction;
 	}
 
 }

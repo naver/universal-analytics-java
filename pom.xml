@@ -6,11 +6,11 @@
   <version>0.0.1-SNAPSHOT</version>
   
   <dependencies>
-	   <dependency>
-		<groupId>org.apache.httpcomponents</groupId>
-		<artifactId>httpclient</artifactId>
-		<version>4.0-alpha4</version>
-	   </dependency>
+	    <dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
 	   
 		<!-- use common-logging over SLF4j -->
 		<dependency>
