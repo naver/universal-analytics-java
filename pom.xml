@@ -4,7 +4,7 @@
 	<groupId>org.ngrinder</groupId>
 	<artifactId>universal-analytics-java</artifactId>
 	<name>universal-analytics-java</name>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 
 	<properties>
 		<jdk-version>1.6</jdk-version>
