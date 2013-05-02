@@ -15,8 +15,8 @@ public class GoogleAnalyticTest {
 		assertTrue(result);
 		
 		analytic = new GoogleAnalytic("AppName","UA-39698063-1");
-		analytic.getHttpPostMothod().setEventCategory("CategoryData");
-		analytic.getHttpPostMothod().setEventAction("changeData");
+		analytic.getMeasureProtocolRequest().setEventCategory("CategoryData");
+		analytic.getMeasureProtocolRequest().setEventAction("changeData");
 		value = (new Random()).nextInt(500);
 		result = analytic.sendStaticDataToUA("statics_data", String.valueOf(value));
 		assertTrue(result);

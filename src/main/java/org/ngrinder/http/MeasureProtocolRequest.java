@@ -14,7 +14,6 @@
 
 package org.ngrinder.http;
 
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -35,46 +34,48 @@ public class MeasureProtocolRequest {
 	private String client_ID;
 
 	private String applicationName;
-	
+
 	private String appVersion;
-	
-	private String eventCategory = "TestStaticData";
 
-	private String eventAction = "collect";
+	private String eventCategory = "default";
 
-	
-  /**
-   *  Constructor passing the application name, application version  and google analytics tracking code
-   *
-   * @param appName       
-   * @param appVersion         
-   * @param trackingCode 
-   * @param client ID
-   */
+	private String eventAction = "default";
+
+	/**
+	 * Constructor passing the application name, application version and google analytics tracking
+	 * code
+	 * 
+	 * @param appName
+	 * @param appVersion
+	 * @param trackingCode
+	 * @param client
+	 *            ID
+	 */
 	public MeasureProtocolRequest(String appName, String appVersion, String trackingCode, String clientID) {
 		this(appName, trackingCode, clientID);
 		this.appVersion = appVersion;
 	}
 
-  /**
-   *  Constructor passing the application name and google analytics tracking code
-   *
-   * @param appName        
-   * @param trackingCode 
-   * @param client ID
-   */
+	/**
+	 * Constructor passing the application name and google analytics tracking code
+	 * 
+	 * @param appName
+	 * @param trackingCode
+	 * @param client
+	 *            ID
+	 */
 	public MeasureProtocolRequest(String appName, String trackingCode, String clientID) {
 		this.track_ID = trackingCode;
 		this.client_ID = clientID;
 		this.applicationName = appName;
 	}
 
-  /**
-   *  Execute  http post method and send data to Google Analytics
-   *
-   * @param Name       
-   * @param value         
-   */
+	/**
+	 * Execute http post method and send data to Google Analytics
+	 * 
+	 * @param Name
+	 * @param value
+	 */
 	public boolean execRequest(String name, String value) {
 		HttpClient client = new HttpClient();
 		PostMethod method = new PostMethod(AnalyticsParameterConstants.POST_URL);
@@ -84,8 +85,8 @@ public class MeasureProtocolRequest {
 		method.addParameter(AnalyticsParameterConstants.HIT_TYPE, "event");
 		method.addParameter(AnalyticsParameterConstants.APPLICATION_NAME, applicationName);
 		method.addParameter(AnalyticsParameterConstants.APPLICATION_VERSION,
-				(!(this.appVersion == null || this.appVersion.length() == 0)) ? this.appVersion
-						: AnalyticsParameterConstants.DEFAULT_VERSION);
+						(!(this.appVersion == null || this.appVersion.length() == 0)) ? this.appVersion
+										: AnalyticsParameterConstants.DEFAULT_VERSION);
 		method.addParameter(AnalyticsParameterConstants.EVENT_CATEGORY, eventCategory);
 		method.addParameter(AnalyticsParameterConstants.EVENT_ACTION, eventAction);
 		method.addParameter(AnalyticsParameterConstants.EVENT_LABEL, name);
@@ -99,14 +100,14 @@ public class MeasureProtocolRequest {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Get event category and its default is TestStaticData
 	 */
 	public String getEventCategory() {
 		return eventCategory;
 	}
-	
+
 	public void setEventCategory(String eventCategory) {
 		this.eventCategory = eventCategory;
 	}
@@ -117,7 +118,7 @@ public class MeasureProtocolRequest {
 	public String getEventAction() {
 		return eventAction;
 	}
-	
+
 	public void setEventAction(String eventAction) {
 		this.eventAction = eventAction;
 	}

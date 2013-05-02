@@ -27,7 +27,7 @@ public class GoogleAnalytic {
 
 	private final static String CLIENT_ID = UUID.randomUUID().toString();
 
-	private MeasureProtocolRequest httpPostMothod;
+	private MeasureProtocolRequest measureProtocolRequest;
 
 	/*
 	 * (non-Javadoc)
@@ -35,7 +35,7 @@ public class GoogleAnalytic {
 	 * @see org.ngrinder.http.MeasureProtocolRequest#MeasureProtocolRequest()
 	 */
 	public GoogleAnalytic(String appName, String trackingCode) {
-		httpPostMothod = new MeasureProtocolRequest(appName, trackingCode, CLIENT_ID);
+		measureProtocolRequest = new MeasureProtocolRequest(appName, trackingCode, CLIENT_ID);
 	}
 	
 	/*
@@ -44,7 +44,7 @@ public class GoogleAnalytic {
 	 * @see org.ngrinder.http.MeasureProtocolRequest#MeasureProtocolRequest()
 	 */
 	public GoogleAnalytic(String appName, String appVersion, String trackingCode) {
-		httpPostMothod = new MeasureProtocolRequest(appName, appVersion, trackingCode, CLIENT_ID);
+		measureProtocolRequest = new MeasureProtocolRequest(appName, appVersion, trackingCode, CLIENT_ID);
 	}
 	
   /**
@@ -54,12 +54,12 @@ public class GoogleAnalytic {
    * @param value         
    */
 	public boolean sendStaticDataToUA(String name, String value) {
-		return httpPostMothod.execRequest(name, value);
+		return measureProtocolRequest.execRequest(name, value);
 	}
 	
 
-	public MeasureProtocolRequest getHttpPostMothod() {
-		return httpPostMothod;
+	public MeasureProtocolRequest getMeasureProtocolRequest() {
+		return measureProtocolRequest;
 	}
 
 }
