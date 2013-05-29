@@ -85,16 +85,19 @@ public class MeasureProtocolRequest {
 		method.addParameter(AnalyticsParameterConstants.HIT_TYPE, "event");
 		method.addParameter(AnalyticsParameterConstants.APPLICATION_NAME, applicationName);
 		method.addParameter(AnalyticsParameterConstants.APPLICATION_VERSION,
-						(!(this.appVersion == null || this.appVersion.length() == 0)) ? this.appVersion
-										: AnalyticsParameterConstants.DEFAULT_VERSION);
+				(!(this.appVersion == null || this.appVersion.length() == 0)) ? this.appVersion
+						: AnalyticsParameterConstants.DEFAULT_VERSION);
 		method.addParameter(AnalyticsParameterConstants.EVENT_CATEGORY, eventCategory);
 		method.addParameter(AnalyticsParameterConstants.EVENT_ACTION, eventAction);
 		method.addParameter(AnalyticsParameterConstants.EVENT_LABEL, name);
 		method.addParameter(AnalyticsParameterConstants.EVENT_VALUE, value);
-
 		try {
+			// Checks whether the String a valid number.
+			Integer.parseInt(value);
 			int returnCode = client.executeMethod(method);
 			return (returnCode == HttpStatus.SC_OK);
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Only valid number is allowed", e);
 		} catch (Exception e) {
 			LOG.error("ERROR: {}", e.getMessage());
 			return false;

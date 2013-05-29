@@ -47,17 +47,26 @@ public class GoogleAnalytic {
 		measureProtocolRequest = new MeasureProtocolRequest(appName, appVersion, trackingCode, CLIENT_ID);
 	}
 	
-  /**
-   *  Send statistic data  to Google Analytics
-   *
-   * @param Name       
-   * @param value         
-   */
+	/**
+	 * Send statistic data to Google Analytics
+	 * 
+	 * @param Name
+	 * @param value
+	 */
 	public boolean sendStaticDataToUA(String name, String value) {
 		return measureProtocolRequest.execRequest(name, value);
 	}
-	
 
+	/**
+	 * Send statistic data to Google Analytics
+	 * 
+	 * @param Name
+	 * @param value
+	 */
+	public boolean sendStaticDataToUA(String name, Integer value) {
+		return measureProtocolRequest.execRequest(name, String.valueOf(value));
+	}
+	
 	public MeasureProtocolRequest getMeasureProtocolRequest() {
 		return measureProtocolRequest;
 	}
